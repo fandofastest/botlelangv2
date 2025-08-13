@@ -4,12 +4,12 @@ const axios = require('axios');
 // agar mudah di-passing ke fungsi dan siap multi-thread
 const defaultConfig = {
   API_LOGIN_URL: 'https://api-auth.lelang.go.id/api/v1/login',
-  USERNAME: 'syahrizal.ricky@gmail.com',
-  PASSWORD: '#makanDodol1',
+  USERNAME: 'mirzahanpratama@gmail.com',
+  PASSWORD: 'Jakartakotague16#',
   BID_API_URL: 'https://bidding.lelang.go.id/api/v1/pelaksanaan/lelang/pengajuan-penawaran',
-  AUCTION_ID: '68398ddb-2c47-44de-a07f-c0bf4c0a0665',
-  PASSKEY: '206739',
-  expectedUserAuctionId: '55fe1a86-e07e-4fa0-99ef-06c2e95a4e1a',
+  AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67',
+  PASSKEY: '032687',
+  expectedUserAuctionId: '7e5a56a6-84fc-4269-8376-4df98832cfff',
   scriptStartTime: '2025-07-02T14:10:00+07:00', // Example start time in ISO format
 };
 
@@ -216,6 +216,7 @@ async function getHistory(authToken, config, expectedUserAuctionId) {
       }
       else {
         console.log('anda last bid'); 
+        console.log('lastbid: ' + firstBid.bidAmount);
       }
     } else {
       console.log('Belum ada data bid');
@@ -363,33 +364,33 @@ function checkAndRunMain(startTime, config, lastBid = null, expectedUserAuctionI
 // Sample: Jalankan 2 instance paralel dengan config berbeda
 const configUser1 = {
   ...defaultConfig,
-  USERNAME: 'syahrizal.ricky@gmail.com',
-  PASSWORD: '#makanDodol1',
-  expectedUserAuctionId: '55fe1a86-e07e-4fa0-99ef-06c2e95a4e1a',
-  PASSKEY: '206739', // PASSKEY khusus user 1
-  AUCTION_ID: '68398ddb-2c47-44de-a07f-c0bf4c0a0665', // AUCTION_ID khusus user 1
-  scriptStartTime: '2025-07-02T14:10:00+07:00' // atau waktu berbeda jika mau
+  USERNAME: 'mirzahanpratama@gmail.com',
+  PASSWORD: 'Jakartakotague16#',
+  expectedUserAuctionId: '7e5a56a6-84fc-4269-8376-4df98832cfff',
+  PASSKEY: '032687', // PASSKEY khusus user 1
+  AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
+  scriptStartTime: '2025-08-14T10:20:00+07:00' // atau waktu berbeda jika mau
 };
 
 const configUser2 = {
   ...defaultConfig,
-  USERNAME: 'syahrizal.ricky@gmail.com',
-  PASSWORD: '#makanDodol1',
-  expectedUserAuctionId: '8b2ac6af-7f24-4e3d-9417-2f0ec2b76cbf', // ganti sesuai userAuctionId user kedua
-  PASSKEY: '047586', // PASSKEY khusus user 2
-  AUCTION_ID: 'c49f03d3-717f-4df3-8bdf-5477c64021a4', // AUCTION_ID khusus user 2
-  scriptStartTime: '2025-07-02T14:00:00+07:00' // atau waktu berbeda jika mau
+  USERNAME: 'mirzahanpratama@gmail.com',
+  PASSWORD: 'Jakartakotague16#',
+  expectedUserAuctionId: 'b28bc6d3-43cd-41b8-9ea5-5b389f7fee23', // ganti sesuai userAuctionId user kedua
+  PASSKEY: '479026', // PASSKEY khusus user 2
+  AUCTION_ID: 'f15aa507-cb58-4129-9128-75bb730f782f', // AUCTION_ID khusus user 2
+  scriptStartTime: '2025-08-14T10:20:00+07:00' // atau waktu berbeda jika mau
 };
 
 
 const configUser3 = {
     ...defaultConfig,
-    USERNAME: 'syahrizal.ricky@gmail.com',
-    PASSWORD: '#makanDodol1',
-    expectedUserAuctionId: 'a456d6b7-9142-4700-b77a-bad70741b6d6', // ganti sesuai userAuctionId user kedua
-    PASSKEY: '124950', // PASSKEY khusus user 2
-    AUCTION_ID: '263be31f-0899-4e58-9181-8a90da7f0560', // AUCTION_ID khusus user 2
-    scriptStartTime: '2025-07-02T14:00:00+07:00' // atau waktu berbeda jika mau
+    USERNAME: 'mirzahanpratama@gmail.com',
+    PASSWORD: 'Jakartakotague16#',
+    expectedUserAuctionId: '26e88374-768c-4fdb-90c5-6c184aca3b15', // ganti sesuai userAuctionId user kedua
+    PASSKEY: '074512', // PASSKEY khusus user 2
+    AUCTION_ID: 'f833b8bf-bfcd-48d3-9f93-11934f86a271', // AUCTION_ID khusus user 2
+    scriptStartTime: '2025-08-14T10:20:00+07:00' // atau waktu berbeda jika mau
   };
 
 // Contoh: jalankan dengan cek waktu (default)
@@ -397,6 +398,6 @@ const configUser3 = {
 // checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId);
 
 // Contoh: jalankan langsung tanpa cek waktu
-checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, true);
+// checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, true);
 // checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId, true);
-// checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, true);
+checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, true);

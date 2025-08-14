@@ -5,7 +5,7 @@ const axios = require('axios');
 const defaultConfig = {
   API_LOGIN_URL: 'https://api-auth.lelang.go.id/api/v1/login',
   USERNAME: 'mirzahanpratama@gmail.com',
-  PASSWORD: 'Jakartakotague16#',
+  PASSWORD: 'Jatiwaringinpondokgede16#',
   BID_API_URL: 'https://bidding.lelang.go.id/api/v1/pelaksanaan/lelang/pengajuan-penawaran',
   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67',
   PASSKEY: '032687',
@@ -365,7 +365,7 @@ function checkAndRunMain(startTime, config, lastBid = null, expectedUserAuctionI
 const configUser1 = {
   ...defaultConfig,
   USERNAME: 'mirzahanpratama@gmail.com',
-  PASSWORD: 'Jakartakotague16#',
+  PASSWORD: 'Jatiwaringinpondokgede16#',
   expectedUserAuctionId: '7e5a56a6-84fc-4269-8376-4df98832cfff',
   PASSKEY: '032687', // PASSKEY khusus user 1
   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
@@ -375,7 +375,7 @@ const configUser1 = {
 const configUser2 = {
   ...defaultConfig,
   USERNAME: 'mirzahanpratama@gmail.com',
-  PASSWORD: 'Jakartakotague16#',
+  PASSWORD: 'Jatiwaringinpondokgede16#',
   expectedUserAuctionId: 'b28bc6d3-43cd-41b8-9ea5-5b389f7fee23', // ganti sesuai userAuctionId user kedua
   PASSKEY: '479026', // PASSKEY khusus user 2
   AUCTION_ID: 'f15aa507-cb58-4129-9128-75bb730f782f', // AUCTION_ID khusus user 2
@@ -386,7 +386,7 @@ const configUser2 = {
 const configUser3 = {
     ...defaultConfig,
     USERNAME: 'mirzahanpratama@gmail.com',
-    PASSWORD: 'Jakartakotague16#',
+    PASSWORD: 'Jatiwaringinpondokgede16#',
     expectedUserAuctionId: '26e88374-768c-4fdb-90c5-6c184aca3b15', // ganti sesuai userAuctionId user kedua
     PASSKEY: '074512', // PASSKEY khusus user 2
     AUCTION_ID: 'f833b8bf-bfcd-48d3-9f93-11934f86a271', // AUCTION_ID khusus user 2

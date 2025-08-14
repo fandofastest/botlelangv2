@@ -398,6 +398,6 @@ const configUser3 = {
 // checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId);
 
 // Contoh: jalankan langsung tanpa cek waktu
-checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, true);
-checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId, true);
-checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, true);
+checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, false);
+checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId, false);
+checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, false);

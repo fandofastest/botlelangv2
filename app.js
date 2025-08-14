@@ -10,7 +10,7 @@ const defaultConfig = {
   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67',
   PASSKEY: '032687',
   expectedUserAuctionId: '7e5a56a6-84fc-4269-8376-4df98832cfff',
-  scriptStartTime: '2025-07-02T14:10:00+07:00', // Example start time in ISO format
+  startBefore: 300, // Mulai 300 detik (5 menit) sebelum lelang berakhir
 };
 
 async function loginUser(config) {
@@ -336,50 +336,66 @@ function adaptivePollingHistory(config, auctionEndTime) {
 
 
 
-function checkAndRunMain(startTime, config, lastBid = null, expectedUserAuctionId = '', skipTimeCheck = false) {
-  if (skipTimeCheck) {
-    console.log('Starting main function immediately (skip time check)...');
-    main(config, lastBid, expectedUserAuctionId).then(() => {
-      pollingHistoryFixed(config, 100); // polling 5 detik sekali
-    });
-    return;
-  }
-  const interval = setInterval(() => {
-    const now = new Date();
-    const start = new Date(startTime);
-    if (now >= start) {
-      console.log('Starting main function...');
-      clearInterval(interval); // Stop checking once the condition is met
-      main(config, lastBid, expectedUserAuctionId).then(() => {
-        adaptivePollingHistory(config, config.scriptStartTime);
-      });
-    } else {
-      const timeLeft = start - now;
-      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-      console.log(`Time left until start: ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
-      console.log('now' + now);
+async function checkAndRunMain(config, skipTimeCheck = false) {
+  // Mendapatkan detail lelang terlebih dahulu untuk mengetahui waktu berakhir
+  let auctionDetails = null;
+  try {
+    const authToken = await loginUser(config);
+    auctionDetails = await getAuctionDetails(authToken, config);
+    if (!auctionDetails || !auctionDetails.tglSelesaiLelang) {
+      console.error('Tidak dapat mendapatkan waktu berakhir lelang, gunakan default');
+      return;
     }
-  }, 100); // Check every 100 ms
+    
+    const auctionEndTime = new Date(auctionDetails.tglSelesaiLelang);
+    console.log(`Waktu lelang berakhir: ${auctionEndTime}`);
+    
+    if (skipTimeCheck) {
+      console.log('Starting main function immediately (skip time check)...');
+      const result = await main(config, null, config.expectedUserAuctionId);
+      console.log(`Starting adaptive polling until auction end: ${auctionDetails.tglSelesaiLelang}`);
+      adaptivePollingHistory(config, auctionDetails.tglSelesaiLelang);
+      return;
+    }
+    // Kalkulasi waktu mulai berdasarkan startBefore (dalam detik)
+    const startTime = new Date(auctionEndTime.getTime() - (config.startBefore * 1000));
+    const now = new Date();
+  
+    if (now >= startTime) {
+      console.log('Starting main function immediately (time condition met)...');
+      const result = await main(config, null, config.expectedUserAuctionId);
+      console.log(`Starting adaptive polling until auction end: ${auctionDetails.tglSelesaiLelang}`);
+      adaptivePollingHistory(config, auctionDetails.tglSelesaiLelang);
+      return;
+    }
+  
+    console.log(`Script akan mulai ${config.startBefore} detik sebelum lelang berakhir (${startTime})`);
+  
+    const interval = setInterval(() => {
+      const now = new Date();
+      if (now >= startTime) {
+        console.log('Starting main function...');
+        clearInterval(interval); // Stop checking once the condition is met
+        main(config, null, config.expectedUserAuctionId).then(() => {
+          console.log(`Starting adaptive polling until auction end: ${auctionDetails.tglSelesaiLelang}`);
+          adaptivePollingHistory(config, auctionDetails.tglSelesaiLelang);
+        });
+      } else {
+        const timeLeft = startTime - now;
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        console.log(`Time left until start: ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
+      }
+    }, 1000);
+  } catch (error) {
+    console.error('Gagal mendapatkan detail lelang:', error);
+  }
 }
 
 
+// Sample: Jalankan 3 instance paralel dengan config berbeda
 
-
-// Sample: Jalankan 2 instance paralel dengan config berbeda
-
-
-
-// const configUsertest = {
-//   ...defaultConfig,
-//   USERNAME: 'kikiariandes007@gmail.com',
-//   PASSWORD: 'Nining007ning#',
-//   expectedUserAuctionId: '6a21de7c-2101-46b6-9c85-911f0a3ceec7',
-//   PASSKEY: '051948', // PASSKEY khusus user 1
-//   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
-//   scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
-// };
 const configUser1 = {
   ...defaultConfig,
   USERNAME: 'mirzahanpratama@gmail.com',
@@ -387,34 +403,34 @@ const configUser1 = {
   expectedUserAuctionId: '7e5a56a6-84fc-4269-8376-4df98832cfff',
   PASSKEY: '032687', // PASSKEY khusus user 1
   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
-  scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
+  startBefore: 300 // Mulai 5 menit sebelum lelang berakhir
 };
+
 const configUser2 = {
   ...defaultConfig,
   USERNAME: 'mirzahanpratama@gmail.com',
   PASSWORD: 'Jatiwaringinpondokgede16#',
-  expectedUserAuctionId: 'b28bc6d3-43cd-41b8-9ea5-5b389f7fee23', // ganti sesuai userAuctionId user kedua
+  expectedUserAuctionId: 'b28bc6d3-43cd-41b8-9ea5-5b389f7fee23',
   PASSKEY: '479026', // PASSKEY khusus user 2
   AUCTION_ID: 'f15aa507-cb58-4129-9128-75bb730f782f', // AUCTION_ID khusus user 2
-  scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
+  startBefore: 300 // Mulai 5 menit sebelum lelang berakhir
 };
 
-
 const configUser3 = {
-    ...defaultConfig,
-    USERNAME: 'mirzahanpratama@gmail.com',
-    PASSWORD: 'Jatiwaringinpondokgede16#',
-    expectedUserAuctionId: '26e88374-768c-4fdb-90c5-6c184aca3b15', // ganti sesuai userAuctionId user kedua
-    PASSKEY: '074512', // PASSKEY khusus user 2
-    AUCTION_ID: 'f833b8bf-bfcd-48d3-9f93-11934f86a271', // AUCTION_ID khusus user 2
-    scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
-  };
+  ...defaultConfig,
+  USERNAME: 'mirzahanpratama@gmail.com',
+  PASSWORD: 'Jatiwaringinpondokgede16#',
+  expectedUserAuctionId: '26e88374-768c-4fdb-90c5-6c184aca3b15',
+  PASSKEY: '074512', // PASSKEY khusus user 3
+  AUCTION_ID: 'f833b8bf-bfcd-48d3-9f93-11934f86a271', // AUCTION_ID khusus user 3
+  startBefore: 300 // Mulai 5 menit sebelum lelang berakhir
+};
 
 // Contoh: jalankan dengan cek waktu (default)
-// checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId);
-// checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId);
+// checkAndRunMain(configUser1);
+// checkAndRunMain(configUser2);
 
 // Contoh: jalankan langsung tanpa cek waktu
-checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, false);
-checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId, false);
-checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, false);
+checkAndRunMain(configUser1, true);
+checkAndRunMain(configUser2, true);
+checkAndRunMain(configUser3, true);

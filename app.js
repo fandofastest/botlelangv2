@@ -369,7 +369,7 @@ const configUser1 = {
   expectedUserAuctionId: '7e5a56a6-84fc-4269-8376-4df98832cfff',
   PASSKEY: '032687', // PASSKEY khusus user 1
   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
-  scriptStartTime: '2025-08-14T10:20:00+07:00' // atau waktu berbeda jika mau
+  scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
 };
 
 const configUser2 = {
@@ -379,7 +379,7 @@ const configUser2 = {
   expectedUserAuctionId: 'b28bc6d3-43cd-41b8-9ea5-5b389f7fee23', // ganti sesuai userAuctionId user kedua
   PASSKEY: '479026', // PASSKEY khusus user 2
   AUCTION_ID: 'f15aa507-cb58-4129-9128-75bb730f782f', // AUCTION_ID khusus user 2
-  scriptStartTime: '2025-08-14T10:20:00+07:00' // atau waktu berbeda jika mau
+  scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
 };
 
 
@@ -390,7 +390,7 @@ const configUser3 = {
     expectedUserAuctionId: '26e88374-768c-4fdb-90c5-6c184aca3b15', // ganti sesuai userAuctionId user kedua
     PASSKEY: '074512', // PASSKEY khusus user 2
     AUCTION_ID: 'f833b8bf-bfcd-48d3-9f93-11934f86a271', // AUCTION_ID khusus user 2
-    scriptStartTime: '2025-08-14T10:20:00+07:00' // atau waktu berbeda jika mau
+    scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
   };
 
 // Contoh: jalankan dengan cek waktu (default)
@@ -398,6 +398,6 @@ const configUser3 = {
 // checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId);
 
 // Contoh: jalankan langsung tanpa cek waktu
-checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, false);
-checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId, false);
-checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, false);
+checkAndRunMain(configUser1.scriptStartTime, configUser1, null, configUser1.expectedUserAuctionId, true);
+checkAndRunMain(configUser2.scriptStartTime, configUser2, null, configUser2.expectedUserAuctionId, true);
+checkAndRunMain(configUser3.scriptStartTime, configUser3, null, configUser3.expectedUserAuctionId, true);

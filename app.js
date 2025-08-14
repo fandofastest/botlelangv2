@@ -79,7 +79,13 @@ async function sendBid(authToken, lastBid, config) {
 
   // Hitung bid baru
   const currentBid = parseFloat(lastBid> auctionDetails.nilaiLimit? lastBid : auctionDetails.nilaiLimit);
-  const bidIncrement = parseFloat(auctionDetails.kelipatanBid);
+  const baseBidIncrement = parseFloat(auctionDetails.kelipatanBid);
+  
+  // Buat multiplier random integer antara 1 dan 4
+  const multiplier = Math.floor(Math.random() * 4) + 1; // Integer 1-4
+  const bidIncrement = baseBidIncrement * multiplier;
+  console.log(`Base increment: ${baseBidIncrement}, Multiplier: ${multiplier}x, Final increment: ${bidIncrement.toFixed(0)}`);
+  
   const newBid = currentBid + bidIncrement;
 
   // Mempersiapkan payload data untuk bid
@@ -362,6 +368,18 @@ function checkAndRunMain(startTime, config, lastBid = null, expectedUserAuctionI
 
 
 // Sample: Jalankan 2 instance paralel dengan config berbeda
+
+
+
+// const configUsertest = {
+//   ...defaultConfig,
+//   USERNAME: 'kikiariandes007@gmail.com',
+//   PASSWORD: 'Nining007ning#',
+//   expectedUserAuctionId: '6a21de7c-2101-46b6-9c85-911f0a3ceec7',
+//   PASSKEY: '051948', // PASSKEY khusus user 1
+//   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
+//   scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
+// };
 const configUser1 = {
   ...defaultConfig,
   USERNAME: 'mirzahanpratama@gmail.com',
@@ -371,7 +389,6 @@ const configUser1 = {
   AUCTION_ID: '6a353963-ede2-48cb-b035-1b1330c77f67', // AUCTION_ID khusus user 1
   scriptStartTime: '2025-08-14T10:27:00+07:00' // atau waktu berbeda jika mau
 };
-
 const configUser2 = {
   ...defaultConfig,
   USERNAME: 'mirzahanpratama@gmail.com',
